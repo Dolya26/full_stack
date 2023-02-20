@@ -179,7 +179,7 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
+    'BLACKLIST_AFTER_ROTATION': False,
 
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
@@ -235,8 +235,42 @@ CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 
 
 CORS_ORIGIN_ALLOW_ALL = True
-# ALLOWED_HOSTS = ["http://127.0.0.1:3000"]
+
+# ALLOWED_HOSTS = ["http://127.0.0.1:3000"], ["http://127.0.0.1"]\
 # CORS_ORIGIN_WHITELIST = [
 #     'http://127.0.0.1:3000'
-#
 # ]
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'main_format': {
+            'format': '{levelname} - {asctime} - {module} - {process:d} - {filename} - {message}',
+            'style': '{',
+        },
+    },
+
+    'handlers': {
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'django.log',
+            'formatter': 'main_format',
+            },
+
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'main_format',
+            },
+        },
+
+    'loggers': {
+            'main': {
+                'handlers': ['console', 'file'],
+                'level': 'INFO',
+                'propagate': True,
+            }
+        },
+    }
+
